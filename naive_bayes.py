@@ -3,7 +3,9 @@ nltk.download('stopwords')
 from nltk.corpus import stopwords
 import pandas as pd
 import numpy as np
+import seaborn as sns 
 from sklearn.feature_extraction.text import CountVectorizer
+import matplotlib.pyplot as plt
 
 def message_cleaning(message):
     
@@ -27,7 +29,7 @@ tweets_df_clean = tweets_df['tweet'].apply(message_cleaning)
 
 print(f'Cleaned up tweet: {tweets_df_clean}') # Show the cleaned up version
 
-vectorizer = CountVectorizer(analyzer = message_cleaning, dtype = np.uint8)
+vectorizer = CountVectorizer(analyzer = message_cleaning, dtype = np.uint8, max_features=12000)
 tweets_countvectorizer = vectorizer.fit_transform(tweets_df['tweet'])
 print(vectorizer.get_feature_names_out())
 print(tweets_countvectorizer.toarray())
@@ -52,4 +54,9 @@ NB_classifier.fit(X_train, Y_train)
 from sklearn.metrics import classification_report, confusion_matrix
 
 # Predicting the Test set results
+Y_predict_test = NB_classifier.predict(X_test)
+cm = confusion_matrix(Y_test, Y_predict_test)
+sns.heatmap(cm, annot=True)
+plt.show()
 
+print(classification_report(Y_test, Y_predict_test))
