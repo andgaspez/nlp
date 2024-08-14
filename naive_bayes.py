@@ -34,10 +34,22 @@ print(tweets_countvectorizer.toarray())
 print(tweets_countvectorizer.shape)
 
 X = pd.DataFrame(tweets_countvectorizer.toarray())
-print(X.shape)
+#print(X.shape)
 
 Y = tweets_df['label']
-print(Y.shape)
-# dummy_text = 'The #development of the @pipeline would be needed to remove stopwords and punctuations!'
-# print(f'Original text: {message_cleaning(dummy_text)}')
-# print(f'{message_cleaning(dummy_text)}')
+#print(Y.shape)
+
+from sklearn.model_selection import train_test_split #standard process whenever we train an AI or ML model
+#we train with 80% of the data, the performance is assest in an unbiased way using new data never seen before (20%)
+
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size = 0.2)
+
+from sklearn.naive_bayes import MultinomialNB
+
+NB_classifier = MultinomialNB()
+NB_classifier.fit(X_train, Y_train)
+
+from sklearn.metrics import classification_report, confusion_matrix
+
+# Predicting the Test set results
+
